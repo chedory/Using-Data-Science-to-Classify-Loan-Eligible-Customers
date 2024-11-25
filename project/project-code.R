@@ -38,7 +38,7 @@ library(ggplot2)
 
 #numbers of missing values
 sum(is.na(data2))
-#numbers of missing values for each column
+#numbers of missing values for each columns
 colSums(is.na(data2))
 
 
