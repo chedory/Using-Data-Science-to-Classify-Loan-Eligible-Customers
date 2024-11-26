@@ -1,6 +1,6 @@
 #setwd("C:\Users\osama\OneDrive\Desktop\university\lvl 7\ISY351-project\project\project-code.R")
-#data <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//train_u6lujuX_CVtuZ9i (1).csv")
-odata <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/ISY351-project/project/datasets/train_u6lujuX_CVtuZ9i (1).csv")
+odata <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//train_u6lujuX_CVtuZ9i (1).csv")
+#odata <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/ISY351-project/project/datasets/train_u6lujuX_CVtuZ9i (1).csv")
 
 odata
 View(data)
@@ -23,38 +23,97 @@ View(odata)
 ############################
 
 
-str(data2)
+str(data)
 
 
-summary(data2)
+summary(data)
 
 #to see the first and last 6 rows of the data
-head(data2)
-tail(data2)
+head(data)
+tail(data)
 
 #to know the numbers of rows and col
-dim(data2)
+dim(data)
 
 # to know the col names
-colnames(data2)
+colnames(data)
 
 
 ###################################
 # Exploratory Data Analysis (EDA)
 ###################################
 library(ggplot2)
-
+library(dplyr)
+library(caret)
 #numbers of missing values
-sum(is.na(data2))
+sum(is.na(data))
+sum(is.na(odata))
+
+
+
+is.na(data)
+is.na(odata)
 #numbers of missing values for each columns
-colSums(is.na(data2))
+colSums(is.na(data))
+colSums(is.na(odata))
 
 
 summary(data)
 
-par(mfrow = c(2, 2))
+par(mfrow = c(3, 2))
 
 
-hist(data2$Gender,breaks =3.5, labels = c("Female", "Male"), main = "Gender count", xlab = "Gender")
-hist(data2$Married,breaks =3.5, labels = c("not married", "married"), main = "married count", xlab = "")
-hist(data2$LoanAmount,breaks =3.5, main = "loan amount count", xlab = "")
+hist(data$Gender,breaks =3.5, labels = c("Female", "Male"), main = "Gender count", xlab = "Gender")
+hist(data$Married,breaks =3.5, labels = c("not married", "married"), main = "married count", xlab = "")
+hist(data$LoanAmount,breaks =3.5, main = "loan amount count")
+hist(data$Education,breaks =3.5, main = "graduate count")
+
+# Barplot for Self_Employed
+Self_Employed_counts <- table(data$Self_Employed)
+barplot(Self_Employed_counts, main = "Self_Employed Count", xlab = "Self_Employed", col = c("red", "blue"))
+
+# Barplot for Gender
+gender_counts <- table(data$Gender)  # Count occurrences of each category
+barplot(gender_counts, main = "Gender Count", xlab = "Gender", col = c("lightblue", "lightpink"))
+
+# Barplot for Married
+married_counts <- table(data$Married)  # Count occurrences of each category
+barplot(married_counts, main = "Marital Status Count", xlab = "Marital Status", col = c("lightgreen", "lightyellow"))
+
+# Histogram for LoanAmount (numerical variable)
+hist(data$LoanAmount, breaks = 10, main = "Loan Amount Distribution", xlab = "Loan Amount", col = "lightblue", border = "black")
+
+# Barplot for Education
+education_counts <- table(data$Education)
+# Count occurrences of each category
+barplot(education_counts, main = "Education Level Count", xlab = "Education Level", col = c("lightcoral", "lightcyan"), names.arg = c("Not Graduate", "Graduate"), ylim = c(0,500))
+
+# Barplot for Loan Status
+Loan_Status_Counts <- table(data$Loan_Status)
+barplot(Loan_Status_Counts, main = "Loan_Status Count", xlab = "Loan Status", col = c("lightcoral", "lightcyan"), names.arg = c("Not Accepted", "Accepted"))
+
+
+
+
+########################################################################################'
+########################################################################################'
+# Handling missing values (imputation example)
+
+numeric_columns <- sapply(data, is.numeric)
+data_numeric <- data[, numeric_columns]
+
+data <- data %>%
+  mutate(across(where(is.numeric), ~ ifelse(is.na(.), mean(., na.rm = TRUE), .))) %>%
+  mutate(across(where(is.factor), ~ ifelse(is.na(.), "Unknown", as.character(.))))
+
+# Encoding categorical variables (if applicable)
+data <- data %>%
+  mutate(across(where(is.factor), as.numeric))  # Converts factors to numeric
+
+# Normalize numeric variables
+preProcess_range <- preProcess(data_numeric, method = c("range"))
+data_numeric_scaled <- predict(preProcess_range, data_numeric)
+
+View(data)
+
+
