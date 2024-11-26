@@ -46,7 +46,7 @@ summary(data)
 
 par(mfrow = c(2, 2))
 
-ggplot(numeric_columns, aes(x = Gender)) + geom_histogram()
 
 hist(data2$Gender,breaks =3.5, labels = c("Female", "Male"), main = "Gender count", xlab = "Gender")
 hist(data2$Married,breaks =3.5, labels = c("not married", "married"), main = "married count", xlab = "")
+hist(data2$LoanAmount,breaks =3.5, main = "loan amount count", xlab = "")
