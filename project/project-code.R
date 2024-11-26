@@ -44,8 +44,9 @@ colSums(is.na(data2))
 
 summary(data)
 
-ggplot(data2, aes(x = Gender)) + geom_histogram()
-os <- axis(1, at = c(0, 1), labels = c("Female", "Male"))
+par(mfrow = c(2, 2))
+
+ggplot(numeric_columns, aes(x = Gender)) + geom_histogram()
 
 hist(data2$Gender,breaks =3.5, labels = c("Female", "Male"), main = "Gender count", xlab = "Gender")
-
+hist(data2$Married,breaks =3.5, labels = c("not married", "married"), main = "married count", xlab = "")
