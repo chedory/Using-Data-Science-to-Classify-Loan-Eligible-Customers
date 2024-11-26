@@ -1,17 +1,23 @@
 #setwd("C:\Users\osama\OneDrive\Desktop\university\lvl 7\ISY351-project\project\project-code.R")
 #data <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//train_u6lujuX_CVtuZ9i (1).csv")
-data <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//train_u6lujuX_CVtuZ9i (1).csv")
+odata <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/ISY351-project/project/datasets/train_u6lujuX_CVtuZ9i (1).csv")
 
-data
+odata
 View(data)
 
 #we dont want this column
-data[12] <- NULL
+odata[12] <- NULL
 
-data2 <- data
-data2$Married <- ifelse(data$Married == "Yes", 1, ifelse(data$Married == "No", 0, NA))
-data2$Gender <- ifelse(data$Gender == "Male", 1, ifelse(data$Gender == "Female", 0, NA))
-View(data2)
+data <- odata
+data$Married <- ifelse(data$Married == "Yes", 1, ifelse(data$Married == "No", 0, NA))
+data$Gender <- ifelse(data$Gender == "Male", 1, ifelse(data$Gender == "Female", 0, NA))
+data$Education <- ifelse(data$Education == "Graduate", 1, ifelse(data$Education == "Not Graduate", 0, NA))
+data$Self_Employed <- ifelse(data$Self_Employed == "Yes", 1, ifelse(data$Self_Employed == "No", 0, NA))
+data$Loan_Status <- ifelse(data$Loan_Status == "Y", 1, ifelse(data$Loan_Status == "N", 0, NA))
+
+
+View(data)
+View(odata)
 ############################
 # Understanding the Data
 ############################
