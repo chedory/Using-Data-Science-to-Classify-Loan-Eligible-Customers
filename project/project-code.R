@@ -1,4 +1,3 @@
-#
 #org_data <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//train_u6lujuX_CVtuZ9i (1).csv")
 org_data <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/ISY351-project/project/datasets/train_u6lujuX_CVtuZ9i (1).csv")
 org_data
@@ -53,9 +52,10 @@ dim(data)
 colnames(data)
 
 
-############################
-# visulastion the Data
-############################
+###################################
+# Exploratory Data Analysis (EDA)
+###################################
+library(ggplot2)
 
 par(mfrow = c(3, 2))
 
@@ -83,12 +83,26 @@ Loan_Status_Counts <- table(data$Loan_Status)
 barplot(Loan_Status_Counts, main = "Loan_Status Count", xlab = "Loan Status",ylim = c(0,500), col = c("darkred", "darkblue"), names.arg = c("Not Accepted", "Accepted"))
 
 
-############################
-# Understanding the Data
-############################
+###################################
+#   checking missing values
+###################################
 
+#there messing value or not
+is.na(data)
+is.na(org_data)
 
-########################################################################################
+#numbers of missing values for each columns
+colSums(is.na(data))
+colSums(is.na(org_data))
+
+#numbers of missing values
+sum(is.na(data))
+sum(is.na(org_data))
+
+##################################
+#    Handling missing values
+##################################
+
 # Handling missing values if it's numric and not 1or0 type:
 columns_mv <- c("ApplicantIncome", "CoapplicantIncome", "LoanAmount", "Loan_Amount_Term")
 
@@ -110,14 +124,14 @@ View(data)
 ########################################################################################
 ###############################   modeling  ############################################
 ########################################################################################
-library(caret)
+library(caret) #library to split , train , model evaluation ,etc..
 
 set.seed(100)  # For reproducibility
 
 # Split data into training and testing (80% train, 20% test)
 trainIndex <- createDataPartition(data$Loan_Status, p = 0.8, list = FALSE)
-trainData <- data[trainIndex, ]
-testData <- data[-trainIndex, ]
+trainData <- data[trainIndex, ] #train 80%
+testData <- data[-trainIndex, ] #test 20%
 
 # Remove the Loan_ID column from both training and test data
 trainData <- trainData[, -which(names(trainData) == "Loan_ID")]
@@ -136,6 +150,14 @@ pred_logistic <- predict(model_logistic, newdata = testData, type = "response")
 
 # Convert probabilities to binary predictions
 pred_logistic_class <- ifelse(pred_logistic > 0.5, 1, 0)
+
+# Plot ROC Curve for Logistic Regression
+library(pROC)
+roc_logistic <- roc(testData$Loan_Status, pred_logistic) 
+plot(roc_logistic, main = "ROC Curve for Logistic Regression", col = "blue", lwd = 2)
+
+# Add AUC
+cat("AUC for Logistic Regression:", auc(roc_logistic), "\n")
 
 
 #model2 - desicion tree
@@ -171,12 +193,6 @@ cat("Logistic Regression Accuracy:", conf_matrix_logistic$overall["Accuracy"], "
 cat("Decision Tree Accuracy:", conf_matrix_tree$overall["Accuracy"], "\n")
 
 
-# Plot ROC Curve for Logistic Regression
-library(pROC)
-roc_logistic <- roc(testData$Loan_Status, pred_logistic) 
-plot(roc_logistic, main = "ROC Curve for Logistic Regression", col = "blue", lwd = 2)
 
-# Add AUC
-cat("AUC for Logistic Regression:", auc(roc_logistic), "\n")
 
 
