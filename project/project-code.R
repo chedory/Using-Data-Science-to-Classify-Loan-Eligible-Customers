@@ -1,23 +1,25 @@
-#setwd("C:\Users\osama\OneDrive\Desktop\university\lvl 7\ISY351-project\project\project-code.R")
-odata <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//train_u6lujuX_CVtuZ9i (1).csv")
-#odata <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/ISY351-project/project/datasets/train_u6lujuX_CVtuZ9i (1).csv")
+#
+#org_data <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//train_u6lujuX_CVtuZ9i (1).csv")
+org_data <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/ISY351-project/project/datasets/train_u6lujuX_CVtuZ9i (1).csv")
+org_data
 
-odata
-View(data)
 
 #we dont want this column
-odata[12] <- NULL
+#org_data[12] <- NULL
 
-data <- odata
+data <- org_data #org_data = original data , data is the new data
+
+
 data$Married <- ifelse(data$Married == "Yes", 1, ifelse(data$Married == "No", 0, NA))
 data$Gender <- ifelse(data$Gender == "Male", 1, ifelse(data$Gender == "Female", 0, NA))
 data$Education <- ifelse(data$Education == "Graduate", 1, ifelse(data$Education == "Not Graduate", 0, NA))
 data$Self_Employed <- ifelse(data$Self_Employed == "Yes", 1, ifelse(data$Self_Employed == "No", 0, NA))
 data$Loan_Status <- ifelse(data$Loan_Status == "Y", 1, ifelse(data$Loan_Status == "N", 0, NA))
+data$Dependents <- ifelse(data$Dependents == "3+", 4, data$Dependents)  # Replace '3+' with 4
+data$Dependents <- as.numeric(data$Dependents)
 
-
+View(org_data)
 View(data)
-View(odata)
 ############################
 # Understanding the Data
 ############################
@@ -44,18 +46,17 @@ colnames(data)
 ###################################
 library(ggplot2)
 library(dplyr)
-library(caret)
 #numbers of missing values
 sum(is.na(data))
-sum(is.na(odata))
+sum(is.na(org_data))
 
 
 
 is.na(data)
-is.na(odata)
+is.na(org_data)
 #numbers of missing values for each columns
 colSums(is.na(data))
-colSums(is.na(odata))
+colSums(is.na(org_data))
 
 
 summary(data)
@@ -74,46 +75,128 @@ barplot(Self_Employed_counts, main = "Self_Employed Count", xlab = "Self_Employe
 
 # Barplot for Gender
 gender_counts <- table(data$Gender)  # Count occurrences of each category
-barplot(gender_counts, main = "Gender Count", xlab = "Gender", col = c("lightblue", "lightpink"))
+barplot(gender_counts, main = "Gender Count", xlab = "Gender", col = c("red", "blue"))
 
 # Barplot for Married
 married_counts <- table(data$Married)  # Count occurrences of each category
-barplot(married_counts, main = "Marital Status Count", xlab = "Marital Status", col = c("lightgreen", "lightyellow"))
+barplot(married_counts, main = "Marital Status Count", xlab = "Marital Status", col = c("red", "blue"))
 
 # Histogram for LoanAmount (numerical variable)
-hist(data$LoanAmount, breaks = 10, main = "Loan Amount Distribution", xlab = "Loan Amount", col = "lightblue", border = "black")
+hist(data$LoanAmount, breaks = 10, main = "Loan Amount Distribution", xlab = "Loan Amount", col = "red", border = "black")
 
 # Barplot for Education
 education_counts <- table(data$Education)
 # Count occurrences of each category
-barplot(education_counts, main = "Education Level Count", xlab = "Education Level", col = c("lightcoral", "lightcyan"), names.arg = c("Not Graduate", "Graduate"), ylim = c(0,500))
+barplot(education_counts, main = "Education Level Count", xlab = "Education Level", col = c("red", "blue"), names.arg = c("Not Graduate", "Graduate"), ylim = c(0,500))
 
 # Barplot for Loan Status
 Loan_Status_Counts <- table(data$Loan_Status)
-barplot(Loan_Status_Counts, main = "Loan_Status Count", xlab = "Loan Status", col = c("lightcoral", "lightcyan"), names.arg = c("Not Accepted", "Accepted"))
+barplot(Loan_Status_Counts, main = "Loan_Status Count", xlab = "Loan Status", col = c("red", "blue"), names.arg = c("Not Accepted", "Accepted"))
 
 
 
 
-########################################################################################'
-########################################################################################'
-# Handling missing values (imputation example)
+########################################################################################
+########################################################################################
+# Handling missing values if it's numric and not 1or0 type:
 
-numeric_columns <- sapply(data, is.numeric)
-data_numeric <- data[, numeric_columns]
+columns_mv <- c("ApplicantIncome", "CoapplicantIncome", "LoanAmount", "Loan_Amount_Term")
 
-data <- data %>%
-  mutate(across(where(is.numeric), ~ ifelse(is.na(.), mean(., na.rm = TRUE), .))) %>%
-  mutate(across(where(is.factor), ~ ifelse(is.na(.), "Unknown", as.character(.))))
+for (col in columns_mv) {
+  # Replace NA with mean
+  data[[col]][is.na(data[[col]])] <- mean(data[[col]], na.rm = TRUE)
+}
 
-# Encoding categorical variables (if applicable)
-data <- data %>%
-  mutate(across(where(is.factor), as.numeric))  # Converts factors to numeric
+#delete NA row if it's 1 or 0:
+data <- na.omit(data) 
 
-# Normalize numeric variables
-preProcess_range <- preProcess(data_numeric, method = c("range"))
-data_numeric_scaled <- predict(preProcess_range, data_numeric)
+nrow(data) #check how many row after deal with messing value
+
+sum(is.na(data))
+sum(is.na(org_data))
 
 View(data)
+
+########################################################################################
+###############################   modeling  ############################################
+########################################################################################
+library(caret)
+
+set.seed(123)  # For reproducibility
+
+# Split data into training and testing (70% train, 30% test)
+trainIndex <- createDataPartition(data$Loan_Status, p = 0.7, list = FALSE)
+trainData <- data[trainIndex, ]
+testData <- data[-trainIndex, ]
+
+# Remove the Loan_ID column from both training and test data
+trainData <- trainData[, -which(names(trainData) == "Loan_ID")]
+testData <- testData[, -which(names(testData) == "Loan_ID")]
+
+# Now, proceed with training your model
+model_logistic <- glm(Loan_Status ~ ., data = trainData, family = "binomial")
+
+# Train a logistic regression model
+model_logistic <- glm(Loan_Status ~ ., data = trainData, family = "binomial")
+
+# Summary of the model
+summary(model_logistic)
+
+# Make predictions on the test set
+pred_logistic <- predict(model_logistic, newdata = testData, type = "response")
+
+# Convert probabilities to binary predictions
+pred_logistic_class <- ifelse(pred_logistic > 0.5, 1, 0)
+
+
+
+##desicion tree
+# Load library for decision trees
+library(rpart)
+library(rpart.plot)
+
+# Train a decision tree
+model_tree <- rpart(Loan_Status ~ ., data = trainData, method = "class")
+
+# Visualize the decision tree
+rpart.plot(model_tree)
+
+# Make predictions on the test set
+pred_tree <- predict(model_tree, newdata = testData, type = "class")
+
+
+
+# Evaluate Logistic Regression
+conf_matrix_logistic <- confusionMatrix(as.factor(pred_logistic_class), as.factor(testData$Loan_Status))
+print(conf_matrix_logistic)
+
+# Evaluate Decision Tree
+conf_matrix_tree <- confusionMatrix(as.factor(pred_tree), as.factor(testData$Loan_Status))
+print(conf_matrix_tree)
+
+# Compare Accuracy
+cat("Logistic Regression Accuracy:", conf_matrix_logistic$overall["Accuracy"], "\n")
+cat("Decision Tree Accuracy:", conf_matrix_tree$overall["Accuracy"], "\n")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Plot ROC Curve for Logistic Regression
+library(pROC)
+roc_logistic <- roc(testData$Loan_Status, pred_logistic) 
+plot(roc_logistic, main = "ROC Curve for Logistic Regression", col = "blue", lwd = 2)
+
+# Add AUC
+cat("AUC for Logistic Regression:", auc(roc_logistic), "\n")
 
 
