@@ -1,6 +1,6 @@
 #
-#org_data <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//train_u6lujuX_CVtuZ9i (1).csv")
-org_data <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/ISY351-project/project/datasets/train_u6lujuX_CVtuZ9i (1).csv")
+org_data <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//train_u6lujuX_CVtuZ9i (1).csv")
+#org_data <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/ISY351-project/project/datasets/train_u6lujuX_CVtuZ9i (1).csv")
 org_data
 
 
@@ -63,35 +63,24 @@ summary(data)
 
 par(mfrow = c(3, 2))
 
-
-hist(data$Gender,breaks =3.5, labels = c("Female", "Male"), main = "Gender count", xlab = "Gender")
-hist(data$Married,breaks =3.5, labels = c("not married", "married"), main = "married count", xlab = "")
-hist(data$LoanAmount,breaks =3.5, main = "loan amount count")
-hist(data$Education,breaks =3.5, main = "graduate count")
-
 # Barplot for Self_Employed
 Self_Employed_counts <- table(data$Self_Employed)
-barplot(Self_Employed_counts, main = "Self_Employed Count", xlab = "Self_Employed", col = c("red", "blue"))
-
+barplot(Self_Employed_counts, main = "Self_Employed Count", xlab = "Self_Employed", col = c("red", "blue"), names.arg = c("Not Employed", "Employed"))
 # Barplot for Gender
 gender_counts <- table(data$Gender)  # Count occurrences of each category
-barplot(gender_counts, main = "Gender Count", xlab = "Gender", col = c("red", "blue"))
-
+barplot(gender_counts, main = "Gender Count", xlab = "Gender", col = c("lightpink", "lightblue"), names.arg = c("Female", "Male"))
 # Barplot for Married
 married_counts <- table(data$Married)  # Count occurrences of each category
-barplot(married_counts, main = "Marital Status Count", xlab = "Marital Status", col = c("red", "blue"))
-
+barplot(married_counts, main = "Marital Status Count", xlab = "Marital Status", col = c("red", "blue"), names.arg = c("Not married", "married"))
 # Histogram for LoanAmount (numerical variable)
-hist(data$LoanAmount, breaks = 10, main = "Loan Amount Distribution", xlab = "Loan Amount", col = "red", border = "black")
+hist(data$LoanAmount, breaks = 10, main = "Loan Amount Distribution", xlab = "Loan Amount", col = "green", border = "black")
 
 # Barplot for Education
 education_counts <- table(data$Education)
-# Count occurrences of each category
-barplot(education_counts, main = "Education Level Count", xlab = "Education Level", col = c("red", "blue"), names.arg = c("Not Graduate", "Graduate"), ylim = c(0,500))
-
+barplot(education_counts, main = "Education Level Count", xlab = "Education Level", col = c("orange", "purple"), names.arg = c("Not Graduate", "Graduate"), ylim = c(0,500))
 # Barplot for Loan Status
 Loan_Status_Counts <- table(data$Loan_Status)
-barplot(Loan_Status_Counts, main = "Loan_Status Count", xlab = "Loan Status", col = c("red", "blue"), names.arg = c("Not Accepted", "Accepted"))
+barplot(Loan_Status_Counts, main = "Loan_Status Count", xlab = "Loan Status", col = c("darkred", "darkblue"), names.arg = c("Not Accepted", "Accepted"))
 
 
 
@@ -117,15 +106,18 @@ sum(is.na(org_data))
 
 View(data)
 
+
+numeric_cols <- c("ApplicantIncome", "CoapplicantIncome", "LoanAmount", "Loan_Amount_Term")
+data[numeric_cols] <- scale(data[numeric_cols])
 ########################################################################################
 ###############################   modeling  ############################################
 ########################################################################################
 library(caret)
 
-set.seed(123)  # For reproducibility
+set.seed(100)  # For reproducibility
 
 # Split data into training and testing (70% train, 30% test)
-trainIndex <- createDataPartition(data$Loan_Status, p = 0.7, list = FALSE)
+trainIndex <- createDataPartition(data$Loan_Status, p = 0.8, list = FALSE)
 trainData <- data[trainIndex, ]
 testData <- data[-trainIndex, ]
 
