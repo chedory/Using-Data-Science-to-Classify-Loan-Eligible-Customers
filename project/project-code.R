@@ -105,7 +105,7 @@ sum(is.na(data))
 sum(is.na(org_data))
 
 View(data)
-
+#
 
 numeric_cols <- c("ApplicantIncome", "CoapplicantIncome", "LoanAmount", "Loan_Amount_Term")
 data[numeric_cols] <- scale(data[numeric_cols])
