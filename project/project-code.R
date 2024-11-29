@@ -78,7 +78,7 @@ married_counts <- table(data$Married)  # Count occurrences of each category
 barplot(married_counts, main = "Marital Status Count", xlab = "Marital Status",ylim = c(0,500), col = c("red", "blue"), names.arg = c("Not married", "married"))
 
 # Histogram for LoanAmount (numerical variable)
-hist(data$LoanAmount, breaks = 10, main = "Loan Amount Distribution",ylim = c(0,300), xlab = "Loan Amount", col = "green", border = "black")
+hist(data$LoanAmount, breaks = 10, main = "Loan Amount Distribution",ylim = c(0,300), xlab = "Loan Amount in Thousnd", col = "green", border = "black")
 
 # Barplot for Education
 education_counts <- table(data$Education)
@@ -95,7 +95,7 @@ barplot(Credit_History_counts,ylim = c(0,500), main = "Credit History Count", xl
 # Barplot for Property_Area
 Property_Area_counts <- table(data$Property_Area)
 barplot(Property_Area_counts,ylim = c(0,250), main = "Property Area Count", xlab = "Property Area", col = c("green", "blue", "orange"), names.arg = c("Urban", "Semiurban", "Rural"))
-
+Property_Area_counts
 
 # Barplot for Loan Status
 Loan_Status_Counts <- table(data$Loan_Status)
@@ -146,6 +146,52 @@ sum(is.na(data)) #missing value in work data
 sum(is.na(org_data)) #missing value in orginal data
 
 View(data)
+
+# 
+# 
+# # Function to remove outliers and return cleaned data and removed values
+# remove_outliers <- function(data, column) {
+#   # Calculate the IQR for the specified column
+#   Q1 <- quantile(data[[column]], 0.25, na.rm = TRUE)
+#   Q3 <- quantile(data[[column]], 0.75, na.rm = TRUE)
+#   IQR <- Q3 - Q1
+# 
+#   # Define the lower and upper bounds
+#   lower_bound <- Q1 - 1.5 * IQR
+#   upper_bound <- Q3 + 1.5 * IQR
+# 
+#   # Identify outliers
+#   outliers <- data[!(data[[column]] >= lower_bound & data[[column]] <= upper_bound), ]
+# 
+#   # Remove outliers from the data
+#   cleaned_data <- data[data[[column]] >= lower_bound & data[[column]] <= upper_bound | is.na(data[[column]]), ]
+# 
+#   # Return cleaned data and outliers
+#   return(list(cleaned_data = cleaned_data, removed_values = outliers))
+# }
+# 
+# columns_to_check <- c("ApplicantIncome", "CoapplicantIncome", "LoanAmount")
+# 
+# cleaned_data <- data
+# all_removed_values <- data.frame()
+# 
+# # Apply the function to each column
+# for (column in columns_to_check) {
+#   results <- remove_outliers(cleaned_data, column)
+#   cleaned_data <- results$cleaned_data
+# 
+#   # Combine removed outliers from each column
+#   all_removed_values <- rbind(all_removed_values, results$removed_values)
+# }
+# 
+# # Print removed values and dimensions for inspection
+# print(all_removed_values)
+# print(dim(cleaned_data))
+# print(dim(data))
+# View(cleaned_data)
+# 
+# data <- cleaned_data
+
 
 ########################################################################################
 ###############################   modeling  ############################################
