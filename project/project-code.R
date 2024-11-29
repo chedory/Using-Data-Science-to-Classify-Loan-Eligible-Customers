@@ -1,5 +1,5 @@
-#org_data <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//train_u6lujuX_CVtuZ9i (1).csv")
-org_data <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/Loan Prediction.csv")
+org_data <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//Loan Prediction.csv")
+#org_data <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/Loan Prediction.csv")
 org_data
 
 
@@ -29,11 +29,11 @@ colnames(org_data)
 data <- org_data #org_data = original data , data = data we work on
 
 # Convert categorical columns to numeric (1 and 0)
-data$Married <- ifelse(data$Married == "Yes", 1, ifelse(data$Married == "No", 0, NA))
-data$Gender <- ifelse(data$Gender == "Male", 1, ifelse(data$Gender == "Female", 0, NA))
-data$Education <- ifelse(data$Education == "Graduate", 1, ifelse(data$Education == "Not Graduate", 0, NA))
-data$Self_Employed <- ifelse(data$Self_Employed == "Yes", 1, ifelse(data$Self_Employed == "No", 0, NA))
-data$Loan_Status <- ifelse(data$Loan_Status == "Y", 1, ifelse(data$Loan_Status == "N", 0, NA))
+data$Married <- ifelse(data$Married == "Yes", 1, ifelse(data$Married == "No", 0, NA)) # Replace "Yes" with 1 and "No"with 0
+data$Gender <- ifelse(data$Gender == "Male", 1, ifelse(data$Gender == "Female", 0, NA)) # Replace "Male" with 1 and "Female" with 0
+data$Education <- ifelse(data$Education == "Graduate", 1, ifelse(data$Education == "Not Graduate", 0, NA))  # Replace "Graduate" with 1 and "Not Graduate" with 0
+data$Self_Employed <- ifelse(data$Self_Employed == "Yes", 1, ifelse(data$Self_Employed == "No", 0, NA))   # Replace "Yes" with 1 and "No"with 0
+data$Loan_Status <- ifelse(data$Loan_Status == "Y", 1, ifelse(data$Loan_Status == "N", 0, NA))   # Replace "Y" with 1 and "N"with 0
 data$Dependents <- ifelse(data$Dependents == "3+", 4, data$Dependents)  # Replace '3+' with 4
 data$Dependents <- as.numeric(data$Dependents) #convert to numeric
 
