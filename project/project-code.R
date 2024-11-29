@@ -101,6 +101,8 @@ barplot(Property_Area_counts,ylim = c(0,250), main = "Property Area Count", xlab
 Loan_Status_Counts <- table(data$Loan_Status)
 barplot(Loan_Status_Counts, main = "Loan_Status Count", xlab = "Loan Status",ylim = c(0,500), col = c("darkred", "darkblue"), names.arg = c("Not Accepted", "Accepted"))
 
+dev.off() # to stop graph 3x3
+
 ##########################
 # Check duplicate rows
 #########################
@@ -148,7 +150,7 @@ View(data)
 ########################################################################################
 ###############################   modeling  ############################################
 ########################################################################################
-library(caret) #library to split , train , model evaluation ,etc..
+library(caret) #library to split , train , model evaluation , Logistic Regression ,etc..
 
 set.seed(100)  # For reproducibility
 
@@ -179,7 +181,7 @@ pred_logistic_class <- ifelse(pred_logistic > 0.5, 1, 0)
 #model2 - desicion tree
 # Load library for decision trees
 library(rpart)
-library(rpart.plot)
+library(rpart.plot) #Visualize decision tree library
 
 # Train decision tree
 model_tree <- rpart(Loan_Status ~ ., data = trainData, method = "class")
@@ -213,7 +215,7 @@ accu <- c(conf_matrix_logistic$overall["Accuracy"], conf_matrix_tree$overall["Ac
 barplot(accu, names.arg = c("Logistic Regression", "Decision Tree"), col = c("blue", "green"), main = "Model Accuracy Comparison", ylim = c(0, 1))
 
 # Plot ROC Curve for Logistic Regression
-library(pROC)
+library(pROC)  #Visualize roc library
 roc_logistic <- roc(testData$Loan_Status, pred_logistic) 
 plot(roc_logistic, main = "ROC Curve for Logistic Regression", col = "blue", lwd = 2) #roc curve graph
 cat("AUC for Logistic Regression:", auc(roc_logistic), "\n") # Add AUC for Logistic Regression 
