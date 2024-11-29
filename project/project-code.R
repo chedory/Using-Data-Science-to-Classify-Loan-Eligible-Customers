@@ -28,7 +28,7 @@ colnames(org_data)
 
 data <- org_data #org_data = original data , data = data we work on
 
-# Convert columns to numeric (1 and 0)
+# Convert categorical columns to numeric (1 and 0)
 data$Married <- ifelse(data$Married == "Yes", 1, ifelse(data$Married == "No", 0, NA))
 data$Gender <- ifelse(data$Gender == "Male", 1, ifelse(data$Gender == "Female", 0, NA))
 data$Education <- ifelse(data$Education == "Graduate", 1, ifelse(data$Education == "Not Graduate", 0, NA))
