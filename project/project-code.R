@@ -1,18 +1,19 @@
 #org_data <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//train_u6lujuX_CVtuZ9i (1).csv")
-org_data <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/ISY351PROJECT_DATASET.csv")
+org_data <- read.csv("C:ظUsers/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/ISY351PROJECT_DATASET.csv")
 org_data
+
 
 ############################
 # Understanding the Data
 ############################
 
+str(org_data) #type of column
+summary(org_data) #summary of each column (mean, min ,max , etc..)
 
-str(org_data)
-summary(org_data)
 
 #to see the first and last 6 rows of the data
-head(org_data)
-tail(org_data)
+head(org_data) #first 6
+tail(org_data) #last 6
 
 #to know the numbers of rows and col
 dim(org_data)
@@ -25,21 +26,22 @@ colnames(org_data)
 #    data prepare
 ############################
 
-data <- org_data #org_data = original data , data is the new data
+data <- org_data #org_data = original data , data = data we work on
 
+# Convert columns to numeric (1 and 0)
 data$Married <- ifelse(data$Married == "Yes", 1, ifelse(data$Married == "No", 0, NA))
 data$Gender <- ifelse(data$Gender == "Male", 1, ifelse(data$Gender == "Female", 0, NA))
 data$Education <- ifelse(data$Education == "Graduate", 1, ifelse(data$Education == "Not Graduate", 0, NA))
 data$Self_Employed <- ifelse(data$Self_Employed == "Yes", 1, ifelse(data$Self_Employed == "No", 0, NA))
 data$Loan_Status <- ifelse(data$Loan_Status == "Y", 1, ifelse(data$Loan_Status == "N", 0, NA))
 data$Dependents <- ifelse(data$Dependents == "3+", 4, data$Dependents)  # Replace '3+' with 4
-data$Dependents <- as.numeric(data$Dependents)
+data$Dependents <- as.numeric(data$Dependents) #convert to numeric
 
-View(org_data)
-View(data)
+View(org_data) #view original data
+View(data)  #view data
 
-str(data)
-summary(data)
+str(data) #type of column
+summary(data) #summary of each column (mean, min ,max , etc..)
 
 #to see the first and last 6 rows of the data
 head(data)
@@ -52,16 +54,20 @@ dim(data)
 colnames(data)
 
 
-###################################
-# Exploratory Data Analysis (EDA)
-###################################
+##############################################
+####### Exploratory Data Analysis (EDA) ######
+##############################################
+
+#######################
+#### visualization ####
+#######################
 library(ggplot2)
 
-par(mfrow = c(3, 2))
+par(mfrow = c(3, 3)) #to show graph 3x3
 
 # Barplot for Self_Employed
 Self_Employed_counts <- table(data$Self_Employed)
-barplot(Self_Employed_counts, main = "Self_Employed Count", xlab = "Self_Employed", col = c("red", "blue"), names.arg = c("Not Employed", "Employed"))
+barplot(Self_Employed_counts,ylim = c(0,500), main = "Self_Employed Count", xlab = "Self_Employed", col = c("red", "blue"), names.arg = c("Not Employed", "Employed"))
 
 # Barplot for Gender
 gender_counts <- table(data$Gender)  # Count occurrences of each category
@@ -78,10 +84,28 @@ hist(data$LoanAmount, breaks = 10, main = "Loan Amount Distribution",ylim = c(0,
 education_counts <- table(data$Education)
 barplot(education_counts, main = "Education Level Count", xlab = "Education Level", col = c("orange", "purple"), names.arg = c("Not Graduate", "Graduate"), ylim = c(0,500))
 
+# Barplot for Loan_Amount_Term
+Loan_Amount_Term_counts <- table(data$Loan_Amount_Term)
+barplot(Loan_Amount_Term_counts,ylim = c(0,500), main = "Loan Amount Term Count", xlab = "Loan Amount Term", col = c("blue", "orange", "green"))
+
+# Barplot for Credit_History
+Credit_History_counts <- table(data$Credit_History)
+barplot(Credit_History_counts,ylim = c(0,500), main = "Credit History Count", xlab = "Credit History", col = c("purple", "yellow"), names.arg = c("No Credit", "Has Credit"))
+
+# Barplot for Property_Area
+Property_Area_counts <- table(data$Property_Area)
+barplot(Property_Area_counts,ylim = c(0,250), main = "Property Area Count", xlab = "Property Area", col = c("green", "blue", "orange"), names.arg = c("Urban", "Semiurban", "Rural"))
+
+
 # Barplot for Loan Status
 Loan_Status_Counts <- table(data$Loan_Status)
 barplot(Loan_Status_Counts, main = "Loan_Status Count", xlab = "Loan Status",ylim = c(0,500), col = c("darkred", "darkblue"), names.arg = c("Not Accepted", "Accepted"))
 
+##########################
+# Check duplicate rows
+#########################
+duplicates <- duplicated(data)
+sum(duplicates)
 
 ###################################
 #   checking missing values
@@ -96,8 +120,8 @@ colSums(is.na(data))
 colSums(is.na(org_data))
 
 #numbers of missing values
-sum(is.na(data))
-sum(is.na(org_data))
+sum(is.na(data)) #missing value in work data
+sum(is.na(org_data)) #missing value in orginal data
 
 ##################################
 #    Handling missing values
@@ -116,8 +140,8 @@ data <- na.omit(data)
 
 nrow(data) #check how many row after deal with messing value
 
-sum(is.na(data))
-sum(is.na(org_data))
+sum(is.na(data)) #missing value in work data
+sum(is.na(org_data)) #missing value in orginal data
 
 View(data)
 
@@ -151,14 +175,6 @@ pred_logistic <- predict(model_logistic, newdata = testData, type = "response")
 # Convert probabilities to binary predictions
 pred_logistic_class <- ifelse(pred_logistic > 0.5, 1, 0)
 
-# Plot ROC Curve for Logistic Regression
-library(pROC)
-roc_logistic <- roc(testData$Loan_Status, pred_logistic) 
-plot(roc_logistic, main = "ROC Curve for Logistic Regression", col = "blue", lwd = 2)
-
-# Add AUC
-cat("AUC for Logistic Regression:", auc(roc_logistic), "\n")
-
 
 #model2 - desicion tree
 # Load library for decision trees
@@ -177,11 +193,11 @@ pred_tree <- predict(model_tree, newdata = testData, type = "class")
 
 
 ########################################################################################
-###############################   Evaluate  ############################################
+###################################   Evaluate  ########################################
 ########################################################################################
 
 # Evaluate Logistic Regression
-conf_matrix_logistic <- confusionMatrix(as.factor(pred_logistic_class), as.factor(testData$Loan_Status))
+conf_matrix_logistic <- confusionMatrix(as.factor(pred_logistic_class), as.factor(testData$Loan_Status)) 
 print(conf_matrix_logistic)
 
 # Evaluate Decision Tree
@@ -191,6 +207,16 @@ print(conf_matrix_tree)
 # Compare Accuracy
 cat("Logistic Regression Accuracy:", conf_matrix_logistic$overall["Accuracy"], "\n")
 cat("Decision Tree Accuracy:", conf_matrix_tree$overall["Accuracy"], "\n")
+
+# Plot bar chart comparing the Accuracy
+accu <- c(conf_matrix_logistic$overall["Accuracy"], conf_matrix_tree$overall["Accuracy"])
+barplot(accu, names.arg = c("Logistic Regression", "Decision Tree"), col = c("blue", "green"), main = "Model Accuracy Comparison", ylim = c(0, 1))
+
+# Plot ROC Curve for Logistic Regression
+library(pROC)
+roc_logistic <- roc(testData$Loan_Status, pred_logistic) 
+plot(roc_logistic, main = "ROC Curve for Logistic Regression", col = "blue", lwd = 2) #roc curve graph
+cat("AUC for Logistic Regression:", auc(roc_logistic), "\n") # Add AUC for Logistic Regression 
 
 
 
