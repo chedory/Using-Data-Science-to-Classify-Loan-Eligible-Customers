@@ -101,7 +101,7 @@ barplot(Property_Area_counts,ylim = c(0,250), main = "Property Area Count", xlab
 Loan_Status_Counts <- table(data$Loan_Status)
 barplot(Loan_Status_Counts, main = "Loan_Status Count", xlab = "Loan Status",ylim = c(0,500), col = c("darkred", "darkblue"), names.arg = c("Not Accepted", "Accepted"))
 
-dev.off() # to stop graph 3x3
+dev.off() # to stop graph and 3x3 graph
 
 ##########################
 # Check duplicate rows
