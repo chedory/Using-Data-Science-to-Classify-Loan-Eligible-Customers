@@ -1,5 +1,5 @@
 #org_data <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//train_u6lujuX_CVtuZ9i (1).csv")
-org_data <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/ISY351-project/project/datasets/train_u6lujuX_CVtuZ9i (1).csv")
+org_data <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/ISY351PROJECT_DATASET.csv")
 org_data
 
 ############################
