@@ -221,6 +221,3 @@ plot(roc_logistic, main = "ROC Curve for Logistic Regression", col = "blue", lwd
 cat("AUC for Logistic Regression:", auc(roc_logistic), "\n") # Add AUC for Logistic Regression 
 
 
-
-
-
