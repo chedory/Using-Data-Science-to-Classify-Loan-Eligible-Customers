@@ -147,50 +147,50 @@ sum(is.na(org_data)) #missing value in orginal data
 
 View(data)
 
-# 
-# 
-# # Function to remove outliers and return cleaned data and removed values
-# remove_outliers <- function(data, column) {
-#   # Calculate the IQR for the specified column
-#   Q1 <- quantile(data[[column]], 0.25, na.rm = TRUE)
-#   Q3 <- quantile(data[[column]], 0.75, na.rm = TRUE)
-#   IQR <- Q3 - Q1
-# 
-#   # Define the lower and upper bounds
-#   lower_bound <- Q1 - 1.5 * IQR
-#   upper_bound <- Q3 + 1.5 * IQR
-# 
-#   # Identify outliers
-#   outliers <- data[!(data[[column]] >= lower_bound & data[[column]] <= upper_bound), ]
-# 
-#   # Remove outliers from the data
-#   cleaned_data <- data[data[[column]] >= lower_bound & data[[column]] <= upper_bound | is.na(data[[column]]), ]
-# 
-#   # Return cleaned data and outliers
-#   return(list(cleaned_data = cleaned_data, removed_values = outliers))
-# }
-# 
-# columns_to_check <- c("ApplicantIncome", "CoapplicantIncome", "LoanAmount")
-# 
-# cleaned_data <- data
-# all_removed_values <- data.frame()
-# 
-# # Apply the function to each column
-# for (column in columns_to_check) {
-#   results <- remove_outliers(cleaned_data, column)
-#   cleaned_data <- results$cleaned_data
-# 
-#   # Combine removed outliers from each column
-#   all_removed_values <- rbind(all_removed_values, results$removed_values)
-# }
-# 
-# # Print removed values and dimensions for inspection
-# print(all_removed_values)
-# print(dim(cleaned_data))
-# print(dim(data))
-# View(cleaned_data)
-# 
-# data <- cleaned_data
+
+
+# Function to remove outliers and return cleaned data and removed values
+remove_outliers <- function(data, column) {
+  # Calculate the IQR for the specified column
+  Q1 <- quantile(data[[column]], 0.25, na.rm = TRUE)
+  Q3 <- quantile(data[[column]], 0.75, na.rm = TRUE)
+  IQR <- Q3 - Q1
+
+  # Define the lower and upper bounds
+  lower_bound <- Q1 - 1.5 * IQR
+  upper_bound <- Q3 + 1.5 * IQR
+
+  # Identify outliers
+  outliers <- data[!(data[[column]] >= lower_bound & data[[column]] <= upper_bound), ]
+
+  # Remove outliers from the data
+  cleaned_data <- data[data[[column]] >= lower_bound & data[[column]] <= upper_bound | is.na(data[[column]]), ]
+
+  # Return cleaned data and outliers
+  return(list(cleaned_data = cleaned_data, removed_values = outliers))
+}
+
+columns_to_check <- c("ApplicantIncome", "CoapplicantIncome", "LoanAmount")
+
+cleaned_data <- data
+all_removed_values <- data.frame()
+
+# Apply the function to each column
+for (column in columns_to_check) {
+  results <- remove_outliers(cleaned_data, column)
+  cleaned_data <- results$cleaned_data
+
+  # Combine removed outliers from each column
+  all_removed_values <- rbind(all_removed_values, results$removed_values)
+}
+
+# Print removed values and dimensions for inspection
+print(all_removed_values)
+print(dim(cleaned_data))
+print(dim(org_data))
+View(cleaned_data)
+
+data <- cleaned_data
 
 
 ########################################################################################
