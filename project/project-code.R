@@ -265,7 +265,7 @@ barplot(accu, names.arg = c("Logistic Regression", "Decision Tree"), col = c("bl
 grid(nx = NA, ny = NULL, col = "lightgray", lty = "dotted") #code for lines in graph
 
 # Plot ROC Curve for Logistic Regression
-library(pROC)  #Visualize roc library
+library(pROC)  #Visualize roc library 
 roc_logistic <- roc(testData$Loan_Status, pred_logistic) 
 plot(roc_logistic, main = "ROC Curve for Logistic Regression", col = "blue", lwd = 2) #roc curve graph
 cat("AUC for Logistic Regression:", auc(roc_logistic), "\n") # add AUC for Logistic Regression 
