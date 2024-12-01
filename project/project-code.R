@@ -1,5 +1,5 @@
-#org_data <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//Loan Prediction.csv")
-org_data <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/Loan Prediction.csv")
+org_data <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//Loan Prediction.csv")
+#org_data <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/Loan Prediction.csv")
 org_data
 
 
@@ -269,3 +269,44 @@ library(pROC)  #Visualize roc library
 roc_logistic <- roc(testData$Loan_Status, pred_logistic) 
 plot(roc_logistic, main = "ROC Curve for Logistic Regression", col = "blue", lwd = 2) #roc curve graph
 cat("AUC for Logistic Regression:", auc(roc_logistic), "\n") # add AUC for Logistic Regression 
+
+
+
+# example of data frame input to output the result of the loan accepteness 
+custom_input <- data.frame(
+  Gender = 1,
+  Married = 1,
+  Dependents = 2,
+  Education = 1,
+  Self_Employed = 0,
+  ApplicantIncome = 3558,
+  CoapplicantIncome = 0,
+  LoanAmount = 95,
+  Loan_Amount_Term = 360,
+  Credit_History = 1,
+  Property_Area = "Urban"
+)
+
+
+# Logistic Regression Prediction
+custom_pred_logistic <- predict(model_logistic, newdata = custom_input, type = "response")
+custom_pred_logistic_class <- ifelse(custom_pred_logistic > 0.5, "YES", "NO")
+cat("Logistic Regression Prediction (Probability):", custom_pred_logistic, "\n")
+cat("Logistic Regression Prediction (Decision):", custom_pred_logistic_class, "\n")
+
+# Decision Tree Prediction
+custom_pred_tree <- predict(model_tree, newdata = custom_input, type = "class")
+custom_pred_tree_decision <- ifelse(custom_pred_tree == 1, "YES", "NO")
+cat("Decision Tree Prediction (Decision):", custom_pred_tree_decision, "\n")
+
+
+
+
+
+
+
+
+
+
+
+
