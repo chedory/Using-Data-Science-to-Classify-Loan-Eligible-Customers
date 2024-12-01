@@ -58,48 +58,120 @@ colnames(data)
 ####### Exploratory Data Analysis (EDA) ######
 ##############################################
 
-#######################
-#### visualization ####
-#######################
-library(ggplot2)
+#####################################
+#data visualization before cleaning  
+#####################################
 
-par(mfrow = c(3, 3)) #to show graph 3x3
+par(mfrow = c(4, 3)) #to show graph 3x3
 
 # Barplot for Self_Employed
 Self_Employed_counts <- table(data$Self_Employed)
-barplot(Self_Employed_counts,ylim = c(0,500), main = "Self_Employed Count", xlab = "Self_Employed", col = c("red", "blue"), names.arg = c("Not Employed", "Employed"))
+barplot(Self_Employed_counts,
+        ylim = c(0,500),
+        main = "Self_Employed Count",
+        xlab = "Self_Employed",
+        col = c("red", "blue"), 
+        names.arg = c("Not Employed", "Employed"))
 
 # Barplot for Gender
 gender_counts <- table(data$Gender)  # Count occurrences of each category
-barplot(gender_counts, main = "Gender Count", xlab = "Gender",ylim = c(0,500), col = c("lightpink", "lightblue"), names.arg = c("Female", "Male"))
+barplot(gender_counts,
+        main = "Gender Count",
+        xlab = "Gender",
+        ylim = c(0,500),
+        col = c("lightpink", "lightblue"),
+        names.arg = c("Female", "Male"))
 
 # Barplot for Married
 married_counts <- table(data$Married)  # Count occurrences of each category
-barplot(married_counts, main = "Marital Status Count", xlab = "Marital Status",ylim = c(0,500), col = c("red", "blue"), names.arg = c("Not married", "married"))
+barplot(married_counts,
+        main = "Marital Status Count",
+        xlab = "Marital Status",
+        ylim = c(0,500),
+        col = c("red", "blue"),
+        names.arg = c("Not married", "married"))
 
 # Histogram for LoanAmount (numerical variable)
-hist(data$LoanAmount, breaks = 10, main = "Loan Amount Distribution",ylim = c(0,300), xlab = "Loan Amount in Thousnd", col = "green", border = "black")
+hist(data$LoanAmount,
+     breaks = 10,
+     main = "Loan Amount Distribution",
+     ylim = c(0,300),
+     xlab = "Loan Amount in Thousnd",
+     col = "green",
+     border = "black")
 
 # Barplot for Education
 education_counts <- table(data$Education)
-barplot(education_counts, main = "Education Level Count", xlab = "Education Level", col = c("orange", "purple"), names.arg = c("Not Graduate", "Graduate"), ylim = c(0,500))
+barplot(education_counts,
+        main = "Education Level Count",
+        xlab = "Education Level",
+        col = c("orange", "purple"),
+        names.arg = c("Not Graduate", "Graduate"),
+        ylim = c(0,500))
 
 # Barplot for Loan_Amount_Term
 Loan_Amount_Term_counts <- table(data$Loan_Amount_Term)
-barplot(Loan_Amount_Term_counts,ylim = c(0,500), main = "Loan Amount Term Count", xlab = "Loan Amount Term", col = c("blue", "orange", "green"))
+barplot(Loan_Amount_Term_counts,
+        ylim = c(0,500),
+        main = "Loan Amount Term Count",
+        xlab = "Loan Amount Term",
+        col = c("blue", "orange", "green"))
 
 # Barplot for Credit_History
 Credit_History_counts <- table(data$Credit_History)
-barplot(Credit_History_counts,ylim = c(0,500), main = "Credit History Count", xlab = "Credit History", col = c("purple", "yellow"), names.arg = c("No Credit", "Has Credit"))
+barplot(Credit_History_counts,
+        ylim = c(0,500),
+        main = "Credit History Count",
+        xlab = "Credit History",
+        col = c("purple", "yellow"),
+        names.arg = c("No Credit", "Has Credit"))
 
 # Barplot for Property_Area
 Property_Area_counts <- table(data$Property_Area)
-barplot(Property_Area_counts,ylim = c(0,250), main = "Property Area Count", xlab = "Property Area", col = c("green", "blue", "orange"), names.arg = c("Urban", "Semiurban", "Rural"))
-Property_Area_counts
+barplot(Property_Area_counts,
+        ylim = c(0,250),
+        main = "Property Area Count",
+        xlab = "Property Area",
+        col = c("green", "blue", "orange"),
+        names.arg = c("Urban", "Semiurban", "Rural"))
 
 # Barplot for Loan Status
 Loan_Status_Counts <- table(data$Loan_Status)
-barplot(Loan_Status_Counts, main = "Loan_Status Count", xlab = "Loan Status",ylim = c(0,500), col = c("darkred", "darkblue"), names.arg = c("Not Accepted", "Accepted"))
+barplot(Loan_Status_Counts,
+        main = "Loan_Status Count",
+        xlab = "Loan Status",
+        ylim = c(0,500),
+        col = c("darkred", "darkblue"),
+        names.arg = c("Not Accepted", "Accepted"))
+
+
+# Histogram for ApplicantIncome
+hist(data$ApplicantIncome, 
+     breaks = 20,  # Number of bins
+     main = "Applicant Income Distribution", 
+     xlab = "Applicant Income", 
+     col = "lightblue", 
+     border = "black", 
+     ylim = c(0, 200))  # Adjusting y-axis limits
+
+# Histogram for CoapplicantIncome
+hist(data$CoapplicantIncome, 
+     breaks = 20,  # Number of bins
+     main = "Coapplicant Income Distribution", 
+     xlab = "Coapplicant Income", 
+     col = "lightgreen", 
+     border = "black", 
+     ylim = c(0, 300))  # Adjusting y-axis limits
+
+# Barplot for Dependents
+Dependents_counts <- table(data$Dependents)  # Count occurrences of each category
+barplot(Dependents_counts, 
+        main = "Dependents Count", 
+        xlab = "Number of Dependents", 
+        col = c("red", "blue", "green", "orange"), 
+        ylim = c(0, 500),  # Adjusting y-axis limits
+        names.arg = c("0", "1", "2", "3+"))  # Labels for categories
+
 
 dev.off() # to stop graph and 3x3 graph
 
@@ -195,6 +267,121 @@ View(cleaned_data)
 
 data <- cleaned_data
 
+#####################################
+#data visualization after cleaning  
+#####################################
+par(mfrow = c(4, 3)) #to show graph 3x3
+
+# Barplot for Self_Employed
+Self_Employed_counts <- table(data$Self_Employed)
+barplot(Self_Employed_counts,
+        ylim = c(0,500),
+        main = "Self_Employed Count",
+        xlab = "Self_Employed",
+        col = c("red", "blue"), 
+        names.arg = c("Not Employed", "Employed"))
+
+# Barplot for Gender
+gender_counts <- table(data$Gender)  # Count occurrences of each category
+barplot(gender_counts,
+        main = "Gender Count",
+        xlab = "Gender",
+        ylim = c(0,500),
+        col = c("lightpink", "lightblue"),
+        names.arg = c("Female", "Male"))
+
+# Barplot for Married
+married_counts <- table(data$Married)  # Count occurrences of each category
+barplot(married_counts,
+        main = "Marital Status Count",
+        xlab = "Marital Status",
+        ylim = c(0,500),
+        col = c("red", "blue"),
+        names.arg = c("Not married", "married"))
+
+# Histogram for LoanAmount (numerical variable)
+hist(data$LoanAmount,
+     breaks = 10,
+     main = "Loan Amount Distribution",
+     ylim = c(0,300),
+     xlab = "Loan Amount in Thousnd",
+     col = "green",
+     border = "black")
+
+# Barplot for Education
+education_counts <- table(data$Education)
+barplot(education_counts,
+        main = "Education Level Count",
+        xlab = "Education Level",
+        col = c("orange", "purple"),
+        names.arg = c("Not Graduate", "Graduate"),
+        ylim = c(0,500))
+
+# Barplot for Loan_Amount_Term
+Loan_Amount_Term_counts <- table(data$Loan_Amount_Term)
+barplot(Loan_Amount_Term_counts,
+        ylim = c(0,500),
+        main = "Loan Amount Term Count",
+        xlab = "Loan Amount Term",
+        col = c("blue", "orange", "green"))
+
+# Barplot for Credit_History
+Credit_History_counts <- table(data$Credit_History)
+barplot(Credit_History_counts,
+        ylim = c(0,500),
+        main = "Credit History Count",
+        xlab = "Credit History",
+        col = c("purple", "yellow"),
+        names.arg = c("No Credit", "Has Credit"))
+
+# Barplot for Property_Area
+Property_Area_counts <- table(data$Property_Area)
+barplot(Property_Area_counts,
+        ylim = c(0,250),
+        main = "Property Area Count",
+        xlab = "Property Area",
+        col = c("green", "blue", "orange"),
+        names.arg = c("Urban", "Semiurban", "Rural"))
+
+# Barplot for Loan Status
+Loan_Status_Counts <- table(data$Loan_Status)
+barplot(Loan_Status_Counts,
+        main = "Loan_Status Count",
+        xlab = "Loan Status",
+        ylim = c(0,500),
+        col = c("darkred", "darkblue"),
+        names.arg = c("Not Accepted", "Accepted"))
+
+
+# Histogram for ApplicantIncome
+hist(data$ApplicantIncome, 
+     breaks = 20,  # Number of bins
+     main = "Applicant Income Distribution", 
+     xlab = "Applicant Income", 
+     col = "lightblue", 
+     border = "black", 
+     ylim = c(0, 200))  # Adjusting y-axis limits
+
+# Histogram for CoapplicantIncome
+hist(data$CoapplicantIncome, 
+     breaks = 20,  # Number of bins
+     main = "Coapplicant Income Distribution", 
+     xlab = "Coapplicant Income", 
+     col = "lightgreen", 
+     border = "black", 
+     ylim = c(0, 300))  # Adjusting y-axis limits
+
+# Barplot for Dependents
+Dependents_counts <- table(data$Dependents)  # Count occurrences of each category
+barplot(Dependents_counts, 
+        main = "Dependents Count", 
+        xlab = "Number of Dependents", 
+        col = c("red", "blue", "green", "orange"), 
+        ylim = c(0, 500),  # Adjusting y-axis limits
+        names.arg = c("0", "1", "2", "3+"))  # Labels for categories
+
+
+
 
 ########################################################################################
 ###############################   modeling  ############################################
@@ -248,19 +435,19 @@ pred_tree <- predict(model_tree, newdata = testData, type = "class")
 ########################################################################################
 
 # Evaluate Logistic Regression
-conf_matrix_logistic <- confusionMatrix(as.factor(pred_logistic_class), as.factor(testData$Loan_Status)) 
-print(conf_matrix_logistic)
+conf_logistic <- confusionMatrix(as.factor(pred_logistic_class), as.factor(testData$Loan_Status)) 
+print(conf_logistic)
 
 # Evaluate Decision Tree
-conf_matrix_tree <- confusionMatrix(as.factor(pred_tree), as.factor(testData$Loan_Status))
-print(conf_matrix_tree)
+conf_tree <- confusionMatrix(as.factor(pred_tree), as.factor(testData$Loan_Status))
+print(conf_tree)
 
 # Compare Accuracy
-cat("Logistic Regression Accuracy:", conf_matrix_logistic$overall["Accuracy"], "\n")
-cat("Decision Tree Accuracy:", conf_matrix_tree$overall["Accuracy"], "\n")
+cat("Logistic Regression Accuracy:", conf_logistic$overall["Accuracy"], "\n")
+cat("Decision Tree Accuracy:", conf_tree$overall["Accuracy"], "\n")
 
 # Plot bar chart comparing the Accuracy
-accu <- c(conf_matrix_logistic$overall["Accuracy"], conf_matrix_tree$overall["Accuracy"])
+accu <- c(conf_logistic$overall["Accuracy"], conf_tree$overall["Accuracy"])
 barplot(accu, names.arg = c("Logistic Regression", "Decision Tree"), col = c("blue", "green"), main = "Model Accuracy Comparison", ylim = c(0, 1))
 grid(nx = NA, ny = NULL, col = "lightgray", lty = "dotted") #code for lines in graph
 
@@ -271,7 +458,9 @@ plot(roc_logistic, main = "ROC Curve for Logistic Regression", col = "blue", lwd
 cat("AUC for Logistic Regression:", auc(roc_logistic), "\n") # add AUC for Logistic Regression 
 
 
-
+#########################################################
+# Additional Effort
+#########################################################
 # example of data frame input to output the result of the loan accepteness 
 custom_input <- data.frame(
   Gender = 1,
@@ -283,7 +472,7 @@ custom_input <- data.frame(
   CoapplicantIncome = 0,
   LoanAmount = 95,
   Loan_Amount_Term = 360,
-  Credit_History = 1,
+  Credit_History = 0,
   Property_Area = "Urban"
 )
 
@@ -298,15 +487,6 @@ cat("Logistic Regression Prediction (Decision):", custom_pred_logistic_class, "\
 custom_pred_tree <- predict(model_tree, newdata = custom_input, type = "class")
 custom_pred_tree_decision <- ifelse(custom_pred_tree == 1, "YES", "NO")
 cat("Decision Tree Prediction (Decision):", custom_pred_tree_decision, "\n")
-
-
-
-
-
-
-
-
-
 
 
 
