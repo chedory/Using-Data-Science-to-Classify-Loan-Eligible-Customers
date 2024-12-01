@@ -1,5 +1,5 @@
-org_data <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//Loan Prediction.csv")
-#org_data <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/Loan Prediction.csv")
+#org_data <- read.csv("C://Users//osama//OneDrive//Desktop//university//lvl 7//ISY351-project//project//datasets//Loan Prediction.csv")
+org_data <- read.csv("C:/Users/brooo/OneDrive/سطح المكتب/IS/مستوى السابع/ISY351/Project/Loan Prediction.csv")
 org_data
 
 
@@ -147,50 +147,53 @@ sum(is.na(org_data)) #missing value in orginal data
 
 View(data)
 
-# 
-# 
-# # Function to remove outliers and return cleaned data and removed values
-# remove_outliers <- function(data, column) {
-#   # Calculate the IQR for the specified column
-#   Q1 <- quantile(data[[column]], 0.25, na.rm = TRUE)
-#   Q3 <- quantile(data[[column]], 0.75, na.rm = TRUE)
-#   IQR <- Q3 - Q1
-# 
-#   # Define the lower and upper bounds
-#   lower_bound <- Q1 - 1.5 * IQR
-#   upper_bound <- Q3 + 1.5 * IQR
-# 
-#   # Identify outliers
-#   outliers <- data[!(data[[column]] >= lower_bound & data[[column]] <= upper_bound), ]
-# 
-#   # Remove outliers from the data
-#   cleaned_data <- data[data[[column]] >= lower_bound & data[[column]] <= upper_bound | is.na(data[[column]]), ]
-# 
-#   # Return cleaned data and outliers
-#   return(list(cleaned_data = cleaned_data, removed_values = outliers))
-# }
-# 
-# columns_to_check <- c("ApplicantIncome", "CoapplicantIncome", "LoanAmount")
-# 
-# cleaned_data <- data
-# all_removed_values <- data.frame()
-# 
-# # Apply the function to each column
-# for (column in columns_to_check) {
-#   results <- remove_outliers(cleaned_data, column)
-#   cleaned_data <- results$cleaned_data
-# 
-#   # Combine removed outliers from each column
-#   all_removed_values <- rbind(all_removed_values, results$removed_values)
-# }
-# 
-# # Print removed values and dimensions for inspection
-# print(all_removed_values)
-# print(dim(cleaned_data))
-# print(dim(data))
-# View(cleaned_data)
-# 
-# data <- cleaned_data
+
+#################
+#  outliers
+#################
+
+ # Function to remove outliers and return cleaned data and removed values
+  remove_outliers <- function(data, column) {
+  # Calculate the IQR for the specified column
+  Q1 <- quantile(data[[column]], 0.25, na.rm = TRUE)
+  Q3 <- quantile(data[[column]], 0.75, na.rm = TRUE)
+  IQR <- Q3 - Q1
+ 
+  # Define the lower and upper bounds
+  lower_bound <- Q1 - 1.5 * IQR
+  upper_bound <- Q3 + 1.5 * IQR
+ 
+  # Identify outliers
+  outliers <- data[!(data[[column]] >= lower_bound & data[[column]] <= upper_bound), ]
+ 
+  # Remove outliers from the data
+  cleaned_data <- data[data[[column]] >= lower_bound & data[[column]] <= upper_bound | is.na(data[[column]]), ]
+
+  # Return cleaned data and outliers
+  return(list(cleaned_data = cleaned_data, removed_values = outliers))
+  }
+ 
+  columns_to_check <- c("ApplicantIncome", "CoapplicantIncome", "LoanAmount")
+
+  cleaned_data <- data
+  all_removed_values <- data.frame()
+ 
+  # Apply the function to each column
+  for (column in columns_to_check) {
+  results <- remove_outliers(cleaned_data, column)
+  cleaned_data <- results$cleaned_data
+ 
+  # Combine removed outliers from each column
+  all_removed_values <- rbind(all_removed_values, results$removed_values)
+  }
+
+# Print removed values and dimensions for inspection
+ print(all_removed_values)
+ print(dim(cleaned_data))
+ print(dim(data))
+ View(cleaned_data)
+ 
+ data <- cleaned_data
 
 
 ########################################################################################
@@ -198,7 +201,7 @@ View(data)
 ########################################################################################
 library(caret) #library to split , train , model evaluation , Logistic Regression ,etc..
 
-set.seed(100)  # For reproducibility
+set.seed(105)  # For reproducibility
 
 # Split data into training and testing (80% train, 20% test)
 trainIndex <- createDataPartition(data$Loan_Status, p = 0.8, list = FALSE)
@@ -259,6 +262,7 @@ cat("Decision Tree Accuracy:", conf_matrix_tree$overall["Accuracy"], "\n")
 # Plot bar chart comparing the Accuracy
 accu <- c(conf_matrix_logistic$overall["Accuracy"], conf_matrix_tree$overall["Accuracy"])
 barplot(accu, names.arg = c("Logistic Regression", "Decision Tree"), col = c("blue", "green"), main = "Model Accuracy Comparison", ylim = c(0, 1))
+grid(nx = NA, ny = NULL, col = "lightgray", lty = "dotted") #code for lines in graph
 
 # Plot ROC Curve for Logistic Regression
 library(pROC)  #Visualize roc library
